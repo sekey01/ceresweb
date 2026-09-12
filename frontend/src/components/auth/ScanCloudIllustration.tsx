@@ -1,14 +1,15 @@
-// Decorative, looping illustration for the login page: a scanned answer
-// sheet flies from the scanner up into the cloud, where the CERES wordmark
-// appears. Purely visual — no interactivity, no external assets/libraries.
+// Decorative, looping illustration for the login page — black & white only.
+// A stationary paper sits in the scanner: dotted rays sweep down across it
+// (the scan), then a second set of dotted rays travel up to the cloud (the
+// upload), where the CERES wordmark appears. Pure SVG/CSS, no libraries.
 export default function ScanCloudIllustration() {
   return (
     <div className="relative w-full max-w-xs mx-auto" aria-hidden="true">
       <svg viewBox="0 0 300 400" className="w-full h-auto overflow-visible">
         <defs>
           <radialGradient id="ceresGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#DBEAFE" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#DBEAFE" stopOpacity="0" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
           </radialGradient>
           <clipPath id="paperClip">
             <rect x="115" y="190" width="70" height="86" rx="6" />
@@ -23,13 +24,13 @@ export default function ScanCloudIllustration() {
           className="animate-scan-cloud-pulse"
           style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
         >
-          <rect x="100" y="70" width="100" height="36" rx="18" fill="#1D4ED8" />
-          <circle cx="120" cy="68" r="22" fill="#1D4ED8" />
-          <circle cx="150" cy="56" r="28" fill="#1D4ED8" />
-          <circle cx="181" cy="68" r="20" fill="#1D4ED8" />
+          <rect x="100" y="70" width="100" height="36" rx="18" fill="#FFFFFF" />
+          <circle cx="120" cy="68" r="22" fill="#FFFFFF" />
+          <circle cx="150" cy="56" r="28" fill="#FFFFFF" />
+          <circle cx="181" cy="68" r="20" fill="#FFFFFF" />
         </g>
 
-        {/* CERES wordmark, appears once the paper "arrives" */}
+        {/* CERES wordmark, appears once the upload rays arrive */}
         <text
           x="150"
           y="124"
@@ -42,60 +43,54 @@ export default function ScanCloudIllustration() {
             fontWeight: 700,
             fontSize: '22px',
             letterSpacing: '4px',
-            fill: '#1E40AF',
+            fill: '#FFFFFF',
           }}
         >
           CERES
         </text>
 
-        {/* Data particles trailing the paper up to the cloud */}
-        <circle
-          cx="150" cy="230" r="4" fill="#93C5FD"
-          className="animate-scan-particle-1"
-          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-        />
-        <circle
-          cx="150" cy="230" r="3" fill="#93C5FD"
-          className="animate-scan-particle-2"
-          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-        />
-        <circle
-          cx="150" cy="230" r="3.5" fill="#93C5FD"
-          className="animate-scan-particle-3"
-          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-        />
+        {/* Upload rays — dotted lines carrying the scan up to the cloud */}
+        <g
+          className="animate-upload-rays"
+          stroke="#E5E7EB"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeDasharray="1 8"
+        >
+          <line x1="128" y1="188" x2="138" y2="112" />
+          <line x1="150" y1="188" x2="150" y2="108" />
+          <line x1="172" y1="188" x2="162" y2="112" />
+        </g>
 
-        {/* Scanner base shadow */}
-        <ellipse cx="150" cy="320" rx="70" ry="8" fill="#1E293B" opacity="0.08" />
+        {/* Scanner base glow (a shadow would vanish on black; use a soft halo instead) */}
+        <ellipse cx="150" cy="320" rx="70" ry="8" fill="#FFFFFF" opacity="0.06" />
 
         {/* Scanner body */}
-        <rect x="85" y="262" width="130" height="50" rx="10" fill="#1E293B" />
-        <rect x="97" y="256" width="106" height="14" rx="6" fill="#CBD5E1" />
-        <circle cx="103" cy="300" r="3" fill="#475569" />
-        <circle cx="115" cy="300" r="3" fill="#475569" />
+        <rect x="85" y="262" width="130" height="50" rx="10" fill="#374151" />
+        <rect x="97" y="256" width="106" height="14" rx="6" fill="#E5E7EB" />
+        <circle cx="103" cy="300" r="3" fill="#9CA3AF" />
+        <circle cx="115" cy="300" r="3" fill="#9CA3AF" />
 
-        {/* Paper — drops in, sits through the scan sweep, then flies to the cloud */}
-        <g
-          className="animate-scan-paper"
-          style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
-        >
-          <rect x="115" y="190" width="70" height="86" rx="6" fill="#FFFFFF" stroke="#E2E8F0" strokeWidth="2" />
-          <rect x="126" y="206" width="48" height="5" rx="2.5" fill="#CBD5E1" />
-          <rect x="126" y="218" width="48" height="5" rx="2.5" fill="#CBD5E1" />
-          <rect x="126" y="230" width="34" height="5" rx="2.5" fill="#CBD5E1" />
-          <rect x="126" y="246" width="40" height="5" rx="2.5" fill="#CBD5E1" />
-          <rect x="126" y="258" width="26" height="5" rx="2.5" fill="#CBD5E1" />
+        {/* Paper — stays put; the rays do the work */}
+        <rect x="115" y="190" width="70" height="86" rx="6" fill="#FFFFFF" stroke="#D1D5DB" strokeWidth="2" />
+        <rect x="126" y="206" width="48" height="5" rx="2.5" fill="#9CA3AF" />
+        <rect x="126" y="218" width="48" height="5" rx="2.5" fill="#9CA3AF" />
+        <rect x="126" y="230" width="34" height="5" rx="2.5" fill="#9CA3AF" />
+        <rect x="126" y="246" width="40" height="5" rx="2.5" fill="#9CA3AF" />
+        <rect x="126" y="258" width="26" height="5" rx="2.5" fill="#9CA3AF" />
 
-          {/* Scan beam sweeping across the paper — a soft glow band plus a
-              bright core, in a cyan distinct from the gray text lines so
-              the sweep itself stays legible. Clipped to the paper's edges. */}
-          <g clipPath="url(#paperClip)" className="animate-scan-line-sweep">
-            <rect x="113" y="190" width="74" height="18" fill="#38BDF8" opacity="0.25" />
-            <rect
-              x="113" y="196" width="74" height="3" rx="1.5"
-              fill="#38BDF8"
-              style={{ filter: 'drop-shadow(0 0 5px rgba(56,189,248,0.95))' }}
-            />
+        {/* Scan rays — dotted, sweep down across the paper's surface */}
+        <g clipPath="url(#paperClip)">
+          <g
+            className="animate-scan-rays"
+            stroke="#111827"
+            strokeLinecap="round"
+          >
+            <line x1="119" y1="196" x2="181" y2="196" strokeWidth="3" strokeDasharray="1 7" />
+            <line x1="126" y1="200" x2="126" y2="212" strokeWidth="2" strokeDasharray="1 5" />
+            <line x1="140" y1="200" x2="140" y2="214" strokeWidth="2" strokeDasharray="1 5" />
+            <line x1="160" y1="200" x2="160" y2="214" strokeWidth="2" strokeDasharray="1 5" />
+            <line x1="174" y1="200" x2="174" y2="212" strokeWidth="2" strokeDasharray="1 5" />
           </g>
         </g>
       </svg>
