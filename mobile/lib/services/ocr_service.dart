@@ -19,7 +19,7 @@ class OcrService {
         data: FormData.fromMap({
           'file_url': imageUrl,
           'output_format': 'html',
-          'mode': 'accurate',
+          'mode': 'fast',
         }),
         options: Options(headers: {'X-API-Key': AppConfig.chandraOcrApiKey}),
       );
@@ -30,7 +30,7 @@ class OcrService {
       final checkUrl = submitData['request_check_url'] as String?;
       if (checkUrl == null) return null;
 
-      // Step 2 — Poll until complete (max 120 s = 60 × 2 s; accurate mode is slower)
+      // Step 2 — Poll until complete (max 120 s = 60 × 2 s; generous upper bound)
       for (int i = 0; i < 60; i++) {
         await Future.delayed(const Duration(seconds: 2));
 
