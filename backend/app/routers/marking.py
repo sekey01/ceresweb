@@ -161,6 +161,39 @@ def upsert_scores(
     return submission.scores
 
 
+@router.put("/submissions/{submission_id}/complete", response_model=SessionResult)
+def complete_marking(
+    submission_id: uuid.UUID,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(UserRole.teacher)),
+):
+    """
+    Explicitly confirms marking is done for this submission, even if a
+    question was deliberately left unscored (e.g. left blank/no answer).
+    Scores otherwise auto-complete once every scheme question has a mark;
+    this exists so the teacher isn't stuck without feedback in that edge
+    case, and so there's a clear, deliberate confirmation action either way.
+    """
+    submission = _get_submission_or_404(submission_id, db)
+    session = _get_session_or_404(submission.session_id, db)
+    _check_teacher_access(session, current_user, db)
+
+    submission.status = SubmissionStatus.marked
+    db.commit()
+    db.refresh(submission)
+
+    scheme = db.query(MarkingScheme).filter(MarkingScheme.session_id == submission.session_id).first()
+    max_possible = sum(float(q.get("max_marks", 0)) for q in (scheme.questions if scheme else []))
+
+    return SessionResult(
+        student_id=submission.student_id,
+        total_score=submission.total_score,
+        max_possible=max_possible,
+        status=submission.status,
+        submission_id=submission.id,
+    )
+
+
 @router.put("/submissions/{submission_id}/scores/{question_number}/comment", response_model=QuestionScoreOut)
 def update_comment(
     submission_id: uuid.UUID,

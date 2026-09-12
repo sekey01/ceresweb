@@ -41,12 +41,12 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Illustration panel — hidden on small screens */}
-      <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-gradient-to-br from-black to-gray-900 p-12 relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center bg-gradient-to-br from-primary-dark to-primary p-12 relative overflow-hidden">
         <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-white/5" />
         <div className="absolute -bottom-32 -right-16 h-96 w-96 rounded-full bg-white/5" />
         <div className="relative">
           <ScanCloudIllustration />
-          <p className="text-center text-gray-400 text-sm mt-4 max-w-xs mx-auto">
+          <p className="text-center text-primary-light/90 text-sm mt-4 max-w-xs mx-auto">
             Scan, grade, and report on exam scripts — automatically synced to the cloud.
           </p>
         </div>

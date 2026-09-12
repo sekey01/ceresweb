@@ -4,13 +4,23 @@ import { useCommentSave } from '../../hooks/useCommentSave';
 import { formatMarks, computeTotal, computeMax } from '../../utils/markingHelpers';
 import type { SubmissionQuestion } from '../../types';
 import Spinner from '../ui/Spinner';
+import Button from '../ui/Button';
 
 interface ScorePanelProps {
   questions: SubmissionQuestion[];
   readOnly?: boolean;
+  isComplete?: boolean;
+  onCompleteMarking?: () => void;
+  completingMarking?: boolean;
 }
 
-export default function ScorePanel({ questions, readOnly = false }: ScorePanelProps) {
+export default function ScorePanel({
+  questions,
+  readOnly = false,
+  isComplete = false,
+  onCompleteMarking,
+  completingMarking = false,
+}: ScorePanelProps) {
   const {
     scores,
     activeQuestionIndex,
@@ -170,15 +180,37 @@ export default function ScorePanel({ questions, readOnly = false }: ScorePanelPr
           <p className="text-xs text-green-700 font-medium">Locked — marking approved by admin</p>
         </div>
       ) : (
-        <div className="px-4 py-3 border-t border-gray-200 flex-shrink-0">
-          <p className="text-xs text-gray-400 leading-relaxed">
-            <strong>F</strong> full · <strong>H</strong> half · <strong>0–9</strong> type marks ·{' '}
-            <strong>Enter/Tab</strong> confirm + next · <strong>Shift+Tab</strong> prev ·{' '}
-            <strong>⌫</strong> clear
-          </p>
-          <p className="text-xs text-gray-400 mt-1">
-            Click comment box to type — shortcuts pause while focused.
-          </p>
+        <div className="border-t border-gray-200 flex-shrink-0">
+          {isComplete ? (
+            <div className="px-4 py-3 bg-green-50 border-b border-green-200 flex items-center gap-2">
+              <svg className="h-4 w-4 text-green-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <p className="text-xs text-green-700 font-medium">Marking complete for this student</p>
+            </div>
+          ) : (
+            <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
+              <Button
+                variant="primary"
+                size="sm"
+                className="w-full"
+                loading={completingMarking}
+                onClick={onCompleteMarking}
+              >
+                Mark as Complete
+              </Button>
+            </div>
+          )}
+          <div className="px-4 py-3">
+            <p className="text-xs text-gray-400 leading-relaxed">
+              <strong>F</strong> full · <strong>H</strong> half · <strong>0–9</strong> type marks ·{' '}
+              <strong>Enter/Tab</strong> confirm + next · <strong>Shift+Tab</strong> prev ·{' '}
+              <strong>⌫</strong> clear
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              Click comment box to type — shortcuts pause while focused.
+            </p>
+          </div>
         </div>
       )}
     </div>

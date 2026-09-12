@@ -36,6 +36,7 @@ export default function MarkingPage() {
   const [loadingSubmissions, setLoadingSubmissions] = useState(true);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
   const [generatingReport, setGeneratingReport] = useState(false);
+  const [completingMarking, setCompletingMarking] = useState(false);
   const { showToast } = useToastStore();
 
   // Load submissions + scheme on mount
@@ -104,7 +105,28 @@ export default function MarkingPage() {
     }
   };
 
+  const handleCompleteMarking = async () => {
+    if (!activeSubmissionId) return;
+    setCompletingMarking(true);
+    try {
+      const result = await markingApi.completeSubmission(activeSubmissionId);
+      setSubmissions((subs) =>
+        subs.map((s) =>
+          s.id === activeSubmissionId
+            ? { ...s, status: result.status, total_score: result.total_score }
+            : s
+        )
+      );
+      showToast('Marked as complete for this student.', 'success');
+    } catch (error) {
+      showToast(await extractErrorMessage(error, 'Could not mark this submission complete. Please try again.'), 'error');
+    } finally {
+      setCompletingMarking(false);
+    }
+  };
+
   const activeQuestion = questions[activeQuestionIndex] ?? null;
+  const activeSubmission = submissions.find((s) => s.id === activeSubmissionId) ?? null;
   const isApproved = session?.review_status === 'approved';
   const allMarked = submissions.length > 0 && submissions.every((s) => s.status === 'marked');
 
@@ -228,7 +250,13 @@ export default function MarkingPage() {
         </div>
 
         {/* Right — Score panel */}
-        <ScorePanel questions={questions} readOnly={isApproved} />
+        <ScorePanel
+          questions={questions}
+          readOnly={isApproved}
+          isComplete={activeSubmission?.status === 'marked'}
+          onCompleteMarking={handleCompleteMarking}
+          completingMarking={completingMarking}
+        />
       </div>
 
       {/* Keyboard handler — disabled when marking is locked */}

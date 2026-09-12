@@ -189,6 +189,32 @@ export default function SessionOverviewPage() {
           ))}
         </div>
 
+        {/* All done — final step: export results (no school-system integration yet) */}
+        {!isApproved && results.length > 0 && totalMarked === results.length && (
+          <div className="bg-primary-light border border-primary/20 rounded-lg p-5 flex items-center justify-between gap-4 flex-wrap">
+            <div>
+              <p className="text-sm font-semibold text-primary-dark">All students marked</p>
+              <p className="text-sm text-gray-600 mt-0.5">
+                Marking is complete for this session. Export the results to hand off — direct upload to the school's
+                system isn't available yet.
+              </p>
+            </div>
+            <div className="flex gap-2 flex-shrink-0">
+              <Button variant="secondary" size="sm" onClick={() => exportResultsCSV(results, id ?? 'session')}>
+                Export CSV
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                loading={generatingReport}
+                onClick={handleGenerateReport}
+              >
+                Generate Report
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Flagged sheets panel */}
         {flagged.length > 0 && (
           <div>

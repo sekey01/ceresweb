@@ -1,7 +1,7 @@
-// Decorative, looping illustration for the login page — black & white only.
-// A stationary paper sits in the scanner: dotted rays sweep down across it
-// (the scan), then a second set of dotted rays travel up to the cloud (the
-// upload), where the CERES wordmark appears. Pure SVG/CSS, no libraries.
+// Decorative, looping illustration for the login page — a white illustration
+// on the blue brand panel. A stationary paper sits in the scanner: dotted
+// rays sweep down across it (the scan), then a second set of dotted rays
+// travel up to the cloud (the upload), where CERES appears. Pure SVG/CSS.
 export default function ScanCloudIllustration() {
   return (
     <div className="relative w-full max-w-xs mx-auto" aria-hidden="true">
@@ -33,7 +33,7 @@ export default function ScanCloudIllustration() {
         {/* CERES wordmark, appears once the upload rays arrive */}
         <text
           x="150"
-          y="124"
+          y="127"
           textAnchor="middle"
           className="animate-scan-text"
           style={{
@@ -52,7 +52,8 @@ export default function ScanCloudIllustration() {
         {/* Upload rays — dotted lines carrying the scan up to the cloud */}
         <g
           className="animate-upload-rays"
-          stroke="#E5E7EB"
+          stroke="#FFFFFF"
+          strokeOpacity="0.9"
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeDasharray="1 8"
@@ -62,28 +63,29 @@ export default function ScanCloudIllustration() {
           <line x1="172" y1="188" x2="162" y2="112" />
         </g>
 
-        {/* Scanner base glow (a shadow would vanish on black; use a soft halo instead) */}
-        <ellipse cx="150" cy="320" rx="70" ry="8" fill="#FFFFFF" opacity="0.06" />
+        {/* Scanner base glow */}
+        <ellipse cx="150" cy="320" rx="70" ry="8" fill="#FFFFFF" opacity="0.08" />
 
-        {/* Scanner body */}
-        <rect x="85" y="262" width="130" height="50" rx="10" fill="#374151" />
-        <rect x="97" y="256" width="106" height="14" rx="6" fill="#E5E7EB" />
-        <circle cx="103" cy="300" r="3" fill="#9CA3AF" />
-        <circle cx="115" cy="300" r="3" fill="#9CA3AF" />
+        {/* Scanner body — white, shaded with opacity for depth */}
+        <rect x="85" y="262" width="130" height="50" rx="10" fill="#FFFFFF" opacity="0.85" />
+        <rect x="97" y="256" width="106" height="14" rx="6" fill="#FFFFFF" />
+        <circle cx="103" cy="300" r="3" fill="#FFFFFF" opacity="0.5" />
+        <circle cx="115" cy="300" r="3" fill="#FFFFFF" opacity="0.5" />
 
         {/* Paper — stays put; the rays do the work */}
-        <rect x="115" y="190" width="70" height="86" rx="6" fill="#FFFFFF" stroke="#D1D5DB" strokeWidth="2" />
+        <rect x="115" y="190" width="70" height="86" rx="6" fill="#FFFFFF" stroke="#FFFFFF" strokeOpacity="0.4" strokeWidth="2" />
         <rect x="126" y="206" width="48" height="5" rx="2.5" fill="#9CA3AF" />
         <rect x="126" y="218" width="48" height="5" rx="2.5" fill="#9CA3AF" />
         <rect x="126" y="230" width="34" height="5" rx="2.5" fill="#9CA3AF" />
         <rect x="126" y="246" width="40" height="5" rx="2.5" fill="#9CA3AF" />
         <rect x="126" y="258" width="26" height="5" rx="2.5" fill="#9CA3AF" />
 
-        {/* Scan rays — dotted, sweep down across the paper's surface */}
+        {/* Scan rays — dotted, sweep down across the paper's surface.
+            Gray, not white, so they stay visible against the white paper. */}
         <g clipPath="url(#paperClip)">
           <g
             className="animate-scan-rays"
-            stroke="#111827"
+            stroke="#6B7280"
             strokeLinecap="round"
           >
             <line x1="119" y1="196" x2="181" y2="196" strokeWidth="3" strokeDasharray="1 7" />
