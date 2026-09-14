@@ -83,17 +83,17 @@ export default function AnalyticsPage() {
         {/* Review status summary */}
         {overview && (
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+            <div className="rounded-lg p-4 text-center">
               <p className="text-2xl font-bold text-green-700 font-mono">{overview.sessions_approved}</p>
-              <p className="text-xs text-green-600 mt-1">Sessions Approved</p>
+              <p className="text-xs  mt-1">Sessions Approved</p>
             </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
+            <div className=" rounded-lg p-4 text-center">
               <p className="text-2xl font-bold text-amber-700 font-mono">{overview.sessions_pending_review}</p>
-              <p className="text-xs text-amber-600 mt-1">Pending Review</p>
+              <p className="text-xs  mt-1">Pending Review</p>
             </div>
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+            <div className=" rounded-lg p-4 text-center">
               <p className="text-2xl font-bold text-red-700 font-mono">{overview.sessions_rejected}</p>
-              <p className="text-xs text-red-600 mt-1">Rejected</p>
+              <p className="text-xs mt-1">Rejected</p>
             </div>
           </div>
         )}

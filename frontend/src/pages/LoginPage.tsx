@@ -47,7 +47,7 @@ export default function LoginPage() {
         <div className="relative">
           <ScanCloudIllustration />
           <p className="text-center text-primary-light/90 text-sm mt-4 max-w-xs mx-auto">
-            Scan, grade, and report on exam scripts — automatically synced to the cloud.
+            Central Engine For OCR Based Examination Upload,Retrival & Digital Evaluation System
           </p>
         </div>
       </div>
