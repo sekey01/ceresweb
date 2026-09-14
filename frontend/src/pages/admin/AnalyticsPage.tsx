@@ -16,7 +16,7 @@ import {
 
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
-    <div className=" bg-transparent border border-gray-200 rounded-lg p-5">
+    <div className=" bg-blue-500 border border-gray-200 rounded-lg p-5">
       <p className="text-sm text-white">{label}</p>
       <p className="text-3xl font-bold text-white mt-1 font-mono">{value}</p>
       {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
