@@ -16,7 +16,7 @@ import {
 
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-5">
+    <div className=" bg-transparent border border-gray-200 rounded-lg p-5">
       <p className="text-sm text-gray-500">{label}</p>
       <p className="text-3xl font-bold text-gray-900 mt-1 font-mono">{value}</p>
       {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
@@ -82,18 +82,18 @@ export default function AnalyticsPage() {
 
         {/* Review status summary */}
         {overview && (
-          <div className="bg-blue-500 grid grid-cols-3 gap-4">
+          <div className="bg-blue-500 rounded-lg grid grid-cols-3 gap-4">
             <div className="rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-green-700 font-mono">{overview.sessions_approved}</p>
-              <p className="text-xs  mt-1">Sessions Approved</p>
+              <p className="text-white text-2xl font-bold font-mono">{overview.sessions_approved}</p>
+              <p className="text-white text-xs  mt-1">Sessions Approved</p>
             </div>
             <div className=" rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-amber-700 font-mono">{overview.sessions_pending_review}</p>
-              <p className="text-xs  mt-1">Pending Review</p>
+              <p className="text-white text-2xl font-bold font-mono">{overview.sessions_pending_review}</p>
+              <p className="text-white text-xs  mt-1">Pending Review</p>
             </div>
             <div className=" rounded-lg p-4 text-center">
-              <p className="text-2xl font-bold text-red-700 font-mono">{overview.sessions_rejected}</p>
-              <p className="text-xs mt-1">Rejected</p>
+              <p className="text-white text-2xl font-bold font-mono">{overview.sessions_rejected}</p>
+              <p className="text-white text-xs mt-1">Rejected</p>
             </div>
           </div>
         )}
