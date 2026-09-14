@@ -65,7 +65,7 @@ export default function AnalyticsPage() {
         {loadingOverview ? (
           <div className="flex justify-center py-8"><Spinner /></div>
         ) : overview ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="bg-blue-500 grid grid-cols-2 sm:grid-cols-4 gap-4">
             <StatCard label="Total Sessions" value={overview.total_sessions} />
             <StatCard label="Total Submissions" value={overview.total_submissions} />
             <StatCard
