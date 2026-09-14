@@ -17,8 +17,8 @@ import {
 function StatCard({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
     <div className=" bg-transparent border border-gray-200 rounded-lg p-5">
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-3xl font-bold text-gray-900 mt-1 font-mono">{value}</p>
+      <p className="text-sm text-white">{label}</p>
+      <p className="text-3xl font-bold text-white mt-1 font-mono">{value}</p>
       {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
     </div>
   );
@@ -65,7 +65,7 @@ export default function AnalyticsPage() {
         {loadingOverview ? (
           <div className="flex justify-center py-8"><Spinner /></div>
         ) : overview ? (
-          <div className="bg-blue-500 grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className=" grid grid-cols-2 sm:grid-cols-4 gap-4">
             <StatCard label="Total Sessions" value={overview.total_sessions} />
             <StatCard label="Total Submissions" value={overview.total_submissions} />
             <StatCard
