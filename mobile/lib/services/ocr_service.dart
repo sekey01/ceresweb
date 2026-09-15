@@ -19,7 +19,7 @@ class OcrService {
         data: FormData.fromMap({
           'file_url': imageUrl,
           'output_format': 'html',
-          'mode': 'fast',
+          'mode': 'balanced',
         }),
         options: Options(headers: {'X-API-Key': AppConfig.chandraOcrApiKey}),
       );
@@ -30,9 +30,15 @@ class OcrService {
       final checkUrl = submitData['request_check_url'] as String?;
       if (checkUrl == null) return null;
 
-      // Step 2 — Poll until complete (max 120 s = 60 × 2 s; generous upper bound)
-      for (int i = 0; i < 60; i++) {
-        await Future.delayed(const Duration(seconds: 2));
+      // Step 2 — Poll until complete, checking soon after submitting and then
+      // backing off. A fixed 2 s interval meant even an instant conversion
+      // couldn't be observed for 2 s, so every single scan paid that wait; the
+      // back-off settles at the same 2 s rate for jobs that really are slow.
+      final deadline = DateTime.now().add(const Duration(seconds: 120));
+      var wait = const Duration(milliseconds: 400);
+
+      while (DateTime.now().isBefore(deadline)) {
+        await Future.delayed(wait);
 
         final pollRes = await _dio.get(
           checkUrl,
@@ -47,6 +53,9 @@ class OcrService {
           final meta = result['metadata'] as Map<String, dynamic>? ?? {};
           return OcrResult(text: html, metadata: meta);
         }
+
+        final next = (wait.inMilliseconds * 1.5).round();
+        wait = Duration(milliseconds: next > 2000 ? 2000 : next);
       }
       return null; // timed out
     } catch (_) {

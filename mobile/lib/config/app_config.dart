@@ -18,7 +18,7 @@ class AppConfig {
 
   // Chandra OCR API
   static const String chandraOcrUrl = 'https://www.datalab.to/api/v1/convert';
-  static const String chandraOcrApiKey = 'Amp3EQbz3GakyNV1ChY_p_GbB5fv3J38pnNO3YozWJY';
+  static const String chandraOcrApiKey = 'mSQMwo70NSudf8G-SqyAPtwwf0c_sm3_DniNCYI0wZU';
 
   // Ceres brand colour
   static const int primaryColor = 0xFF1D4ED8;
