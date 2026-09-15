@@ -131,7 +131,7 @@ export default function InstitutionsPage() {
 
   return (
     <div>
-      <TopBar title="Institutions" backTo="/admin" actions={<Button onClick={openCreate}>Add {tab.slice(0, -1)}</Button>} />
+      <TopBar title="Institutions" backTo="/admin" actions={<Button onClick={openCreate}>Add { tab.slice(0, -1)}</Button>} />
       <div className="p-6">
         {/* Tabs */}
         <div className="flex gap-1 border-b border-gray-200 mb-6">

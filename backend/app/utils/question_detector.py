@@ -8,9 +8,32 @@ QUESTION_LABEL_PATTERN = re.compile(
     r'(?:^|\n)\s*((?:Q|q|Question|question|QUESTION)\s*\.?\s*(\d+[a-zA-Z]?))\b',
     re.MULTILINE
 )
+
+# A question label sitting at the very start of a math expression. When a
+# student writes the label and the formula on one line ("Q2 ∫(3x²+4x-5)dx"),
+# the OCR reads the whole line as maths and returns the label inside the math
+# markup — where the line-anchored QUESTION_LABEL_PATTERN above can never see
+# it, so that question's answer silently merges into the previous one.
+#
+# The (?!\s*=) guard keeps genuine variables out of it: on a physics script
+# "Q1 = 5\,\text{C}" is a charge, not a question label, and must stay as maths.
+_LEADING_LABEL_RE = re.compile(
+    r'^((?:Q|q|Question|question|QUESTION)\s*\.?\s*\d+[a-zA-Z]?)\b(?!\s*=)[\s.:)]*'
+)
+
+# Same problem, but for maths the OCR delimits with dollars in plain text
+# rather than a <math> element — that form never reaches _convert_math_tags.
+_DOLLAR_LABEL_RE = re.compile(
+    r'(?:^|\n)[^\S\n]*(\$\$?)[^\S\n]*'
+    r'((?:Q|q|Question|question|QUESTION)\s*\.?\s*\d+[a-zA-Z]?)\b(?!\s*=)[\s.:)]*'
+)
+
 _HTML_TAG_RE = re.compile(r'<[^>]+>')
+# Both ends of a block element, not just the closing tag: content that follows
+# inline text (a hoisted formula, say) would otherwise stay on the same line as
+# it, hiding a question label that opens the next paragraph.
 _BLOCK_BOUNDARY_RE = re.compile(
-    r'<br\s*/?>|</(?:p|div|li|tr|h[1-6])\s*>',
+    r'<br\s*/?>|</?(?:p|div|li|tr|h[1-6])(?:\s[^>]*)?>',
     re.IGNORECASE
 )
 
@@ -47,8 +70,22 @@ def _convert_math_tags(root) -> None:
         if not latex:
             _replace_with_text(math_el, '')
             continue
+
+        # Hoist a leading question label back out into plain text on its own
+        # line, leaving only the formula inside the delimiters. Without this
+        # the '\[' lands directly against the label and detect_questions()
+        # can't match it — see _LEADING_LABEL_RE.
+        prefix = ''
+        label_match = _LEADING_LABEL_RE.match(latex)
+        if label_match:
+            prefix = '\n' + label_match.group(1) + '\n'
+            latex = latex[label_match.end():].strip()
+            if not latex:
+                _replace_with_text(math_el, prefix)
+                continue
+
         wrapped = f'\\[{latex}\\]' if math_el.get('display') == 'block' else f'\\({latex}\\)'
-        _replace_with_text(math_el, wrapped)
+        _replace_with_text(math_el, prefix + wrapped)
 
 
 def _cell_lines(cell) -> List[str]:
@@ -118,6 +155,10 @@ def _strip_html(text: str) -> str:
     except (etree.ParserError, ValueError):
         pass
 
+    # Dollar-delimited maths arrives as plain text, so it never passes through
+    # _convert_math_tags — hoist any leading label out of it the same way.
+    text = _DOLLAR_LABEL_RE.sub(lambda m: f'\n{m.group(2)}\n{m.group(1)}', text)
+
     with_breaks = _BLOCK_BOUNDARY_RE.sub('\n', text)
     plain = _HTML_TAG_RE.sub(' ', with_breaks)
     plain = plain.replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>').replace('&nbsp;', ' ')
@@ -139,11 +180,14 @@ def detect_questions(ocr_text: str, ocr_metadata: dict = None) -> List[Dict]:
     for i, match in enumerate(matches):
         start = match.start()
         end = matches[i + 1].start() if i + 1 < len(matches) else len(plain)
+        # The capture stops at the number, so a written "Q1." leaves its
+        # separator behind at the head of the body.
+        body = re.sub(r'^\s*[.):\-]\s*', '', plain[match.end():end])
         questions.append({
             "label": match.group(1).strip(),
             "question_number": match.group(2).strip(),
             "start_pos": start,
-            "text_content": plain[match.end():end].strip()
+            "text_content": body.strip()
         })
 
     return questions
